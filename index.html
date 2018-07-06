@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <style>
+      body {
+        width: 100%;
+        overflow: hidden;
+      }
+      #id1 {
+        float: left;
+        padding: 0 0 20px 0;
+        width: 20%;
+        overflow-y: auto;
+        height: 600px; 
+      }
+      #id1 > div {
+        display: none;
+      }
+      #id1 div div div:hover {
+        opacity: .6;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      #id1 div f {
+        float: right;
+        padding: 0 10px;
+        text-decoration: underline;
+      }
+      #id1 div div .delta {
+        float: right;
+      }
+      #id1 div div .price {
+        opacity: 0;
+      }
+      #id1 #sort {
+        display: block !important;
+      }
+
+      #right {
+        position: relative;
+        float: right;
+        width: 60%;
+        overflow-y: auto;
+      }
+      .info {
+        padding: 0 10px;
+      }
+      h4 {
+        padding: 0 10px;
+      }
+
+      #bar-info {
+        float: right;
+        width: 20%;
+      }
+
+      .progress {
+        width: 100%;
+      }
+
+      #BMprog {
+        margin: 5px 0 0px;
+        width: 0px;
+        height: 10px;
+        background: purple;
+      }
+
+      #CGprog {
+        margin: 5px 0 0px;
+        width: 0px;
+        height: 10px;
+        background: purple;
+      }
+
+      #Finprog, #Tprog {
+        margin: 5px 0 0px;
+        width: 0px;
+        height: 10px;
+        background: purple;
+      }
+
+      .thumbs {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .thumb {
+        display: inline-block;
+        vertical-align: top;
+        width: 35px;
+        height: 35px;
+        border: 1px solid #000;
+        opacity: .7;
+        text-align: center;
+        line-height: 35px;
+        cursor: pointer;
+      }
+
+      #right .filter {
+        position: absolute;
+        top: 0;
+        left: 10px;
+        width: 60px;
+        height: 30px;
+      }
+      #right .filter-leg {
+        position: absolute;
+        top: 0;
+        left: 75px;
+        width: 60px;
+        height: 30px;
+      }
+
+      #timer {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        width: 40px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        border: 1px solid #000;
+        border-radius: 3px;
+      }
+
+      #right .filter #max_price{
+        width: 60px;
+      }
+      #right .filter-leg #filter-leg{
+        width: 60px;
+      }
+
+      .listCoincidence {
+        position: absolute;
+        top: 35px;
+        left: 10px;
+        width: auto;
+        height: auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        z-index: 1000;
+        background: #fff;
+      }
+
+      #listCoincidenceToggle {
+        position: absolute;
+        top: 23px;
+        left: 10px;
+        width: 10px;
+        height: 10px;
+        background: #000;
+        border-radius: 50%;
+      }
+
+      .title {
+        cursor: pointer;
+      }
+
+      #error {
+        font-size: 20px;
+        text-align: center;
+        padding: 40px 0;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <div id="id1">
+      <div class="BM"></div>
+      <div class="CG"></div>
+      <div class="Fin"></div>
+      <div class="T"></div>
+    </div>
+
+    <div id="bar-info">
+
+      <div class="start">
+        <div class="btn" id="init">Start</div>
+      </div>
+
+      <div class="progress">
+        <div id="BMprog"></div>
+        <div id="CGprog"></div>
+        <div id="Finprog"></div>
+        <div id="Tprog"></div>
+      </div>
+
+      <div class="info" id='position'>
+        <span class='team1'></span> <span id='leg1'></span> - <span class='team2'></span> <span id='leg2'></span>
+      </div>
+
+      <div class="info" id="correlation"></div>
+
+      <div class="info" id="spread"></div>
+
+      <div class="info" id="ratio"></div>
+
+      <div class="info" id="delta"></div>
+
+      <div class="info" id="static"></div>
+
+      <style>
+        .b-search {
+          position: absolute;
+          right: 0px;
+          bottom: 0px;
+          width: 100px;
+        }
+        #search-stock1 {
+          display: block;
+          width: 100%;
+          height: 15px;
+        }
+        #search-stock2 {
+          display: block;
+          width: 100%;
+          height: 15px;
+        }
+        .btn {
+          display: block;
+          width: 100%;
+          height: 15px;
+          text-align: center;
+          font-size: 13px;
+          line-height: 15px;
+          color: #000;
+          border: 1px solid #000;
+          cursor: pointer;
+        }
+        .workingColor {
+          animation: bg  2s infinite ease-in-out;
+        }
+        @keyframes bg {
+          from {
+            background: rgba(255,255,255,.5);
+          }
+          to {
+            background: rgba(102,51,255,.5);
+          }
+        }
+        .
+      </style>
+
+      <div class="b-search">
+        <div class="b-search-stock1">
+          <input type="text" id="search-stock1">
+        </div>
+        <div class="b-search-stock2">
+          <input type="text" id="search-stock2">
+        </div>
+        <div class="b-search-stock2">
+          <div class="btn" id="search">Найти</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="right">
+
+      <div class="filter">
+        <input id="max_price" type="text" placeholder="max price" />
+      </div>
+      <div class="filter-leg">
+        <input id="filter-leg" type="text" placeholder="leg" />
+      </div>
+
+      <div id='listCoincidenceToggle'></div>
+      <div class="listCoincidence" id="listCoincidence">
+        
+      </div>
+
+      <div class="thumbs">
+        <div class='thumb' id="BM-thumb">BM</div>
+        <div class='thumb' id="CG-thumb">CG</div>
+        <div class='thumb' id="Fin-thumb">Fin</div>
+        <div class='thumb' id="T-thumb">T</div>
+        <div class='thumb' id="Sort-thumb">Sort!</div>
+      </div>
+
+      <div id="timer">
+        
+      </div>
+
+      <div id="error"></div>
+
+      <h4 class='team1'></h4>
+      <div id="chart_first_stock" style="width: 100%; height: 300px;"></div>
+    
+      <h4 class='team2'></h4>
+      <div id="chart_second_stock" style="width: 100%; height: 300px;"></div>
+
+      <h4>Ratio</h4>
+      <div id="chart_ratio" style="width: 100%; height: 300px;"></div>
+
+      <h4>Spread</h4>
+      <div id="chart_spread" style="width: 100%; height: 300px;"></div>
+
+      <h4>Delta</h4>
+      <div id="chart_delta" style="width: 100%; height: 300px;"></div>
+
+    </div>
+
+  </body>
+
+  <script>window.$ = window.jQuery = require('./lib/jquery.js');</script>
+  <script>
+    // You can also require other files to run in this process
+    // require('./correlation.js');
+    require('./functions.js');
+  </script>
+
+  <script>
+    let muchCoincidence = function(list) {
+
+      let _list = new Set();
+
+      let $c = {};
+
+      list.each((i,a)=>{
+        let _a = ($(a).attr('id')).split('-');
+        _list.add(_a[0]);
+        _list.add(_a[1]);
+      });
+
+      list.each((i,a)=>{
+        let _a = ($(a).attr('id')).split('-');
+
+        _list.forEach((b,i)=>{
+          if (_a[0] == b) {
+            $c[_a[0]] = $c[_a[0]] ? $c[_a[0]] : 0;
+            $c[_a[0]] = $c[_a[0]] + 1;
+          };
+          if (_a[1] == b) {
+            $c[_a[1]] = $c[_a[1]] ? $c[_a[1]] : 0;
+            $c[_a[1]] = $c[_a[1]] + 1;
+          };
+        });
+      });
+
+      $('#listCoincidence').html('');
+
+      if (Object.keys($c).length > 1) {
+
+        let insert = '';
+
+        let container = '';
+
+        for (let key in $c) {
+          if ($c[key] >= 5) {
+            container += `<div style='color: green;' class='${key}'><span class="title">${key}</span> - <span class="count">${$c[key]}</span></div>`;
+          } else {
+            container += `<div class='${key}'><span class="title">${key}</span> - <span class="count">${$c[key]}</span></div>`;
+          }
+        }
+
+        insert = '<div>' + container + '</div>';
+
+        list = $.parseHTML(container);
+
+        let compareNumbers = function (a, b) {
+          return Math.abs($(a).find('.count').text()) - Math.abs($(b).find('.count').text());
+        };
+
+        list.sort(compareNumbers);
+
+        list = Array.prototype.slice.call(list,'');
+
+        list.reverse();
+
+        let block = '';
+
+        list.forEach((a, i)=>{
+          block += $(a)[0].outerHTML;
+        });
+
+        $('#listCoincidence').html(block);
+      };
+    };
+  </script>
+
+  <script>
+    $(document).on('click', '.title', function(){
+      let title = $(this).text();
+      $('#filter-leg').val(title);
+      $('#filter-leg').trigger('keyup');
+    });
+  </script>
+
+  <script>
+    $('#listCoincidenceToggle').on('click', function() {
+      $('#listCoincidence').slideToggle();
+    });
+
+    $('#right').css('height', $(window).height());
+    $('#id1').css('height', $(window).height());
+    $('#bar-info').css('height', $(window).height());
+
+    $(window).on('resize', ()=>{
+      $('#right').css('height', $(window).height());
+      $('#id1').css('height', $(window).height());
+      $('#bar-info').css('height', $(window).height());
+    });
+
+    $('#BM-thumb').on('click', () => { 
+      $('#id1>div').hide().removeClass('active'); 
+      $('.BM').show().addClass('active'); 
+      $('#max_price').val('');
+
+      let list = $('.active').find('div').find('div');
+
+        list.each((i,a)=>{
+          $(a).show();
+        });
+
+      muchCoincidence(list);
+    });
+
+    $('#CG-thumb').on('click', () => { 
+      $('#id1>div').hide().removeClass('active'); 
+      $('.CG').show().addClass('active'); 
+      $('#max_price').val('');
+      let list = $('.active').find('div').find('div');
+
+        list.each((i,a)=>{
+          $(a).show();
+        });
+
+        muchCoincidence(list);
+    });
+
+    $('#Fin-thumb').on('click', () => { 
+      $('#id1>div').hide().removeClass('active'); 
+      $('.Fin').show().addClass('active'); 
+      $('#max_price').val('');
+      let list = $('.active').find('div').find('div');
+
+        list.each((i,a)=>{
+          $(a).show();
+        });
+
+        muchCoincidence(list);
+    });
+
+    $('#T-thumb').on('click', () => { 
+      $('#id1>div').hide().removeClass('active'); 
+      $('.T').show().addClass('active'); 
+      $('#max_price').val('');
+      let list = $('.active').find('div').find('div');
+
+        list.each((i,a)=>{
+          $(a).show();
+        });
+
+      muchCoincidence(list);
+    });
+  </script>
+
+  <script>
+    $("#Sort-thumb").on('click', ()=>{
+      $("#Sort-thumb").css('backgroundColor', 'rgba(102,51,255,.9)');
+      let list = $('.active').find('div').find('div');
+
+      let compareNumbers = function (a, b) {
+        return Math.abs($(a).find('.delta').text()) - Math.abs($(b).find('.delta').text());
+      };
+
+      list.sort(compareNumbers);
+
+      list = Array.prototype.slice.call(list,'');
+
+      list.reverse();
+
+      let block = '';
+
+      list.forEach((a, i)=>{
+        block += $(a)[0].outerHTML;
+      });
+
+      $('.active').find('div').empty().html(block);
+      $("#Sort-thumb").css('background-color', 'rgba(255,255,255,.5)');
+    });
+  </script>
+
+  <script>
+    $('#max_price').on('keyup',function(){
+      try {
+        let _a =  Math.abs($(this).val());
+        if (_a === 0) _a = 9999;
+        let list = $('.active').find('div').find('div');
+
+        list.each((i,a)=>{
+          $(a).show();
+        });
+
+        list.each((i,a)=>{
+          let price = Math.abs($(a).find('.price').text());
+          if(price > _a) $(a).hide();
+        })
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  </script>
+
+  <script>
+    $('#filter-leg').on('keyup',function(){
+      try {
+        let _a =  $(this).val().trim().toUpperCase();
+        
+        let list = $('.active').find('div').find('div');
+
+        list.each((i,a)=>{
+          $(a).show();
+        });
+
+        if (!_a) return false;
+
+        list.each((i,a)=>{
+          let _arr = [];
+          _arr = $(a).attr('id').split('-');
+          if (_arr[0].trim() === _a || _arr[1].trim() === _a) $(a).show();
+          else $(a).hide();
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  </script>
+
+  <script>
+    let time = 5 * 60;
+    setTimeout( function go() {
+
+      time--;
+      $('#timer').html(time);
+
+      if (time < 0) location.reload();
+
+      let clock = new Date(),
+          hour  = clock.getUTCHours();
+
+      if (hour > 13 && hour < 20) setTimeout(go, 1000);
+    }, 1000);
+  </script>
+</html>

@@ -834,19 +834,19 @@ let $storeT = [];
 let keys = ['6225','4344','6227', '8492', '9892'];
 
 	storeBM = stocksBM.map((a)=>{
-		return `http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=${a}&apikey=${keys[Math.floor(Math.random() * keys.length)]}`;
+		return `https://api.iextrading.com/1.0/stock/${a}/chart/6m?chartLast=60`;
 	});
 
 	storeCG = stocksCG.map((a)=>{
-		return `http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=${a}&apikey=${keys[Math.floor(Math.random() * keys.length)]}`;
+		return `https://api.iextrading.com/1.0/stock/${a}/chart/6m?chartLast=60`;
 	});
 
 	storeFin = stocksFin.map((a)=>{
-		return `http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=${a}&apikey=${keys[Math.floor(Math.random() * keys.length)]}`;
+		return `https://api.iextrading.com/1.0/stock/${a}/chart/6m?chartLast=60`;
 	});
 
 	storeT  = stocksT.map((a)=>{
-		return `http://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&symbol=${a}&apikey=${keys[Math.floor(Math.random() * keys.length)]}`;
+		return `https://api.iextrading.com/1.0/stock/${a}/chart/6m?chartLast=60`;
 	});
 
 /*
@@ -887,34 +887,41 @@ let asyncGraber = function(array, _store, selectorProg, selector, thumb, proxies
 
 			let count = [];
 
-			let proxy = proxies[Math.floor(Math.random() * proxies.length)];
+			// let proxy = proxies[Math.floor(Math.random() * proxies.length)];
 
-			needle.get(url, { proxy: proxy, follow_max: 5, open_timeout: 2000 }, function(err, resp, body) {
+			// proxy: proxy,
+			needle.get(url, { follow_max: 5, open_timeout: 2000 }, function(err, resp, body) {
 
 				try {
 
-					let ticker = resp.body['Meta Data']['2. Symbol'];
+					let symbol = url.slice(url.indexOf('stock/') + 6, url.indexOf('/chart'));
 
-					for (let key in resp.body['Time Series (5min)']) {
+					let ticker = symbol;
+
+					if (body === 'Unknown symbol') {
+						return done(null);
+					}
+
+					body.forEach((a, index) => {
 
 						let temp = {};
 
-						temp['key']    = key;
-						temp['open']   = Math.abs(resp.body['Time Series (5min)'][key]['1. open']);
-						temp['high']   = Math.abs(resp.body['Time Series (5min)'][key]['2. high']);
-						temp['low']    = Math.abs(resp.body['Time Series (5min)'][key]['3. low']);
-						temp['close']  = Math.abs(resp.body['Time Series (5min)'][key]['4. close']);
-						temp['volume'] = Math.abs(resp.body['Time Series (5min)'][key]['5. volume']);
+						temp['key']    = index;
+						temp['open']   = Math.abs(a.open);
+						temp['high']   = Math.abs(a.high);
+						temp['low']    = Math.abs(a.low);
+						temp['close']  = Math.abs(a.close);
+						temp['volume'] = Math.abs(a.volume);
 
 						count.push(temp);
-					};
+
+					});
 
 					proc += increment;
 
 					$(selectorProg).css('width', proc + '%');
 
-					if (count.length < 99) done(null);
-					else if(Math.abs(count[0]['close']) < 90) {
+					if (Math.abs(count[0]['close']) < 90) {
 
 						$store.push({
 							ticker : ticker,
@@ -930,6 +937,7 @@ let asyncGraber = function(array, _store, selectorProg, selector, thumb, proxies
 						
 					} else done(null);
 				} catch (e) {
+					console.log(e);
 					done(true);
 				} 
 			});
@@ -961,27 +969,27 @@ let init = function() {
 	let flag = Promise.resolve();
 
 	flag
+	// .then(()=>{
+	// 	return Promise.all([
+	// 		proxy.graberA(),
+	// 		proxy.graberB()
+	// 	]);
+	// })
+	// .then((array)=>{
+	// 	let _a = [];
+	// 	array.map((a)=>{
+	// 		return a.forEach((b)=>{
+	// 			return _a.push(b);
+	// 		})
+	// 	});
+	// 	return _a;
+	// })
 	.then(()=>{
-		return Promise.all([
-			proxy.graberA(),
-			proxy.graberB()
-		]);
-	})
-	.then((array)=>{
-		let _a = [];
-		array.map((a)=>{
-			return a.forEach((b)=>{
-				return _a.push(b);
-			})
-		});
-		return _a;
-	})
-	.then((proxies)=>{
 		Promise.all([
-			asyncGraber(storeBM, $storeBM, '#BMprog', '.BM', '#BM-thumb', proxies),
-			asyncGraber(storeCG, $storeCG, '#CGprog', '.CG', '#CG-thumb', proxies),
-			asyncGraber(storeFin, $storeFin, '#Finprog', '.Fin', '#Fin-thumb', proxies),
-			asyncGraber(storeT, $storeT, '#Tprog', '.T', '#T-thumb', proxies)
+			asyncGraber(storeBM, $storeBM, '#BMprog', '.BM', '#BM-thumb'),
+			asyncGraber(storeCG, $storeCG, '#CGprog', '.CG', '#CG-thumb'),
+			asyncGraber(storeFin, $storeFin, '#Finprog', '.Fin', '#Fin-thumb'),
+			asyncGraber(storeT, $storeT, '#Tprog', '.T', '#T-thumb')
 		]);
 	})
 	.catch((e)=>{
@@ -989,10 +997,9 @@ let init = function() {
 	});
 };
 
-init();
-
 $(function(){
 	$('#init').on('click',function(){
+		init();
 		$(this).hide();		
 	});
 

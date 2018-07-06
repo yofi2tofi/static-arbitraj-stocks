@@ -1,0 +1,162 @@
+body {
+  width: 100%;
+  overflow: hidden;
+}
+#id1 {
+  float: left;
+  padding: 0 0 20px 0;
+  width: 20%;
+  overflow-y: auto;
+  height: 600px; 
+}
+#id1 > div {
+  display: none;
+}
+#id1 div div div:hover {
+  opacity: .6;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#id1 div f {
+  float: right;
+  padding: 0 10px;
+  text-decoration: underline;
+}
+#id1 div div .delta {
+  float: right;
+}
+#id1 div div .price {
+  opacity: 0;
+}
+#id1 #sort {
+  display: block !important;
+}
+
+#right {
+  position: relative;
+  float: right;
+  width: 60%;
+  overflow-y: auto;
+}
+.info {
+  padding: 0 10px;
+}
+h4 {
+  padding: 0 10px;
+}
+
+#bar-info {
+  float: right;
+  width: 20%;
+}
+
+.progress {
+  width: 100%;
+}
+
+#BMprog {
+  margin: 5px 0 0px;
+  width: 0px;
+  height: 10px;
+  background: purple;
+}
+
+#CGprog {
+  margin: 5px 0 0px;
+  width: 0px;
+  height: 10px;
+  background: purple;
+}
+
+#Finprog, #Tprog {
+  margin: 5px 0 0px;
+  width: 0px;
+  height: 10px;
+  background: purple;
+}
+
+.thumbs {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.thumb {
+  display: inline-block;
+  vertical-align: top;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #000;
+  opacity: .7;
+  text-align: center;
+  line-height: 35px;
+  cursor: pointer;
+}
+
+#right .filter {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  width: 60px;
+  height: 30px;
+}
+#right .filter-leg {
+  position: absolute;
+  top: 0;
+  left: 75px;
+  width: 60px;
+  height: 30px;
+}
+
+#timer {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  width: 40px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border: 1px solid #000;
+  border-radius: 3px;
+}
+
+#right .filter #max_price{
+  width: 60px;
+}
+#right .filter-leg #filter-leg{
+  width: 60px;
+}
+
+.listCoincidence {
+  position: absolute;
+  top: 35px;
+  left: 10px;
+  width: auto;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 1000;
+  background: #fff;
+}
+
+#listCoincidenceToggle {
+  position: absolute;
+  top: 23px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  background: #000;
+  border-radius: 50%;
+}
+
+.title {
+  cursor: pointer;
+}
+
+#error {
+  font-size: 20px;
+  text-align: center;
+  padding: 40px 0;
+}
